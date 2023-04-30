@@ -47,6 +47,9 @@ export default {
     auth.token = Object.assign({}, token)
     parsedAuth = fromJS(auth)
 
+    // eslint-disable-next-line no-console
+    console.log("api-docs name", parsedAuth.get("name"))
+
     return state.setIn( [ "authorized", parsedAuth.get("name") ], parsedAuth )
   },
 

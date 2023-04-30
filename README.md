@@ -1,4 +1,18 @@
 # swagger-ui 3.17.1 扩展 yan 2023.4.27
+
+## 安装依赖、运行
+- npm run predev
+- npm run dev
+- 浏览器访问 http://localhost:3200
+
+## 编译发布 
+- npm run build && ./zip.sh
+  - 58s
+  - dist打包zip，并移动到 ../springfox/spring-swagger-ui/build/zip 
+- 按springfox/README.md，继续完成springfox-swagger-ui编译发布
+  - 1m17s
+ 
+## 改进
 - package.json
   - 增加registry
     ```
@@ -28,8 +42,7 @@
     ```
     重新npm run dev成功
   - 浏览器正常访问 http://localhost:3200
-- zip.sh
-  - 将zip包移动到 ../springfox/spring-swagger-ui/build/zip 
+
 
 
 # Swagger UI

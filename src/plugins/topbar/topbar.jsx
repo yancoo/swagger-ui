@@ -5,6 +5,7 @@ import PropTypes from "prop-types"
 import Logo from "./logo_small.png"
 import {parseSearch, serializeSearch} from "../../core/utils"
 
+const LOCALSTORAGE_SWAGGER_SPEC_URL = "swagger_spec_url"
 export default class Topbar extends React.Component {
 
   static propTypes = {
@@ -26,6 +27,10 @@ export default class Topbar extends React.Component {
   }
 
   loadSpec = (url) => {
+    // eslint-disable-next-line no-console
+    console.log("load spec", url)
+    localStorage.setItem(LOCALSTORAGE_SWAGGER_SPEC_URL, url)
+
     this.props.specActions.updateUrl(url)
     this.props.specActions.download(url)
   }
@@ -83,6 +88,16 @@ export default class Topbar extends React.Component {
               this.setState({selectedIndex: i})
             }
         })
+      } else {
+        let storageSpecUrl = localStorage.getItem(LOCALSTORAGE_SWAGGER_SPEC_URL)
+        if( storageSpecUrl ){
+          urls.forEach((spec, i) => {
+          if(spec.url === storageSpecUrl)
+            {
+              this.setState({selectedIndex: i})
+            }
+        })
+        }
       }
     }
   }
@@ -156,6 +171,7 @@ export default class Topbar extends React.Component {
 
 Topbar.propTypes = {
   specSelectors: PropTypes.object.isRequired,
+  authActions: PropTypes.object.isRequired,
   specActions: PropTypes.object.isRequired,
   getComponent: PropTypes.func.isRequired,
   getConfigs: PropTypes.func.isRequired

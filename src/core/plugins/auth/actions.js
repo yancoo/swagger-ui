@@ -30,6 +30,7 @@ export function authorize(payload) {
 }
 
 export function logout(payload) {
+  localStorage.removeItem(LOCALSTORAGE_OAUTH2_TOKEN)
   return {
     type: LOGOUT,
     payload: payload
@@ -201,10 +202,17 @@ export const authorizeRequest = ( data ) => ( { fn, getConfigs, authActions, err
       return
     }
 
+    // cloud improvement
 		token.expiresTime = new Date().getTime() + (token.expires_in * 1000)
 		token.expiresTimeStr = formatDate(new Date(token.expiresTime))
 
-    localStorage.setItem(LOCALSTORAGE_OAUTH2_TOKEN, JSON.stringify({auth: auth, token: token}))
+    let savedAuth = JSON.parse(JSON.stringify(auth)) // clone
+    savedAuth.name = "anyone"
+    savedAuth.schema.tokenUrl = "/"
+    savedAuth.password = "*"
+    // savedAuth.clientId = "*"
+    // savedAuth.clientSecret = "*"
+    localStorage.setItem(LOCALSTORAGE_OAUTH2_TOKEN, JSON.stringify({auth: savedAuth, token: token}))
 
     authActions.authorizeOauth2({ auth, token})
   })
@@ -219,13 +227,14 @@ export const authorizeRequest = ( data ) => ( { fn, getConfigs, authActions, err
   })
 }
 
-export const tryAuthorizeFromLocalStorage = () => ( { authActions } ) => {
+export const tryAuthorizeFromLocalStorage = (name) => ( { authActions } ) => {
   var swaggerAuthTokenStr = localStorage.getItem(LOCALSTORAGE_OAUTH2_TOKEN)
   if( !swaggerAuthTokenStr ){
     return
   }
   var swaggerAuthToken = JSON.parse(swaggerAuthTokenStr)
   var auth = swaggerAuthToken.auth
+  auth.name = name // very important
   var token = swaggerAuthToken.token
 
   if( new Date().getTime() > token.expiresTime ){
