@@ -1,3 +1,37 @@
+# swagger-ui 3.17.1 扩展 yan 2023.4.27
+- package.json
+  - 增加registry
+    ```
+    "predev": "npm install --registry https://registry.npm.taobao.org",
+    ```
+  - 依据springfox 2.9.2 springfox-swagger-ui/build.gradle要求
+    ```
+    node {
+      version = '8.11.1' // LTS
+      ...
+    }
+    ```
+    安装node 8：
+    ```
+    nvm install 8
+    nvm current 
+    v8.17.0
+    ```
+  - npm run predev
+  - npm run dev，一堆和swagger-client相关的错误，查看package.json：
+    ```
+    "swagger-client": "^3.8.5",
+    ```
+    根据node_modules/swagger-client/package.json，版本为3.9.6，过于超前，修改（swagger-ui/）package.json固定版本：
+    ```
+    "swagger-client": "3.8.5", # 不再使用最新版本
+    ```
+    重新npm run dev成功
+  - 浏览器正常访问 http://localhost:3200
+- zip.sh
+  - 将zip包移动到 ../springfox/spring-swagger-ui/build/zip 
+
+
 # Swagger UI
 
 [![NPM version](https://badge.fury.io/js/swagger-ui.svg)](http://badge.fury.io/js/swagger-ui)

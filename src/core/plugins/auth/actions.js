@@ -1,6 +1,7 @@
+/* eslint-disable no-console */
 import parseUrl from "url-parse"
 import win from "core/window"
-import { btoa, buildFormData } from "core/utils"
+import { btoa, buildFormData, formatDate} from "core/utils"
 
 export const SHOW_AUTH_POPUP = "show_popup"
 export const AUTHORIZE = "authorize"
@@ -9,6 +10,8 @@ export const PRE_AUTHORIZE_OAUTH2 = "pre_authorize_oauth2"
 export const AUTHORIZE_OAUTH2 = "authorize_oauth2"
 export const VALIDATE = "validate"
 export const CONFIGURE_AUTH = "configure_auth"
+
+export const LOCALSTORAGE_OAUTH2_TOKEN = "swagger_oauth2_token"
 
 const scopeSeparator = " "
 
@@ -198,6 +201,11 @@ export const authorizeRequest = ( data ) => ( { fn, getConfigs, authActions, err
       return
     }
 
+		token.expiresTime = new Date().getTime() + (token.expires_in * 1000)
+		token.expiresTimeStr = formatDate(new Date(token.expiresTime))
+
+    localStorage.setItem(LOCALSTORAGE_OAUTH2_TOKEN, JSON.stringify({auth: auth, token: token}))
+
     authActions.authorizeOauth2({ auth, token})
   })
   .catch(e => {
@@ -209,6 +217,23 @@ export const authorizeRequest = ( data ) => ( { fn, getConfigs, authActions, err
       message: err.message
     } )
   })
+}
+
+export const tryAuthorizeFromLocalStorage = () => ( { authActions } ) => {
+  var swaggerAuthTokenStr = localStorage.getItem(LOCALSTORAGE_OAUTH2_TOKEN)
+  if( !swaggerAuthTokenStr ){
+    return
+  }
+  var swaggerAuthToken = JSON.parse(swaggerAuthTokenStr)
+  var auth = swaggerAuthToken.auth
+  var token = swaggerAuthToken.token
+
+  if( new Date().getTime() > token.expiresTime ){
+    console.log("token is expired")
+    return
+  }
+
+  authActions.authorizeOauth2({auth, token})
 }
 
 export function configureAuth(payload) {

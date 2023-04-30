@@ -1,6 +1,6 @@
 {
   "name": "swagger-ui",
-  "version": "3.17.1",
+  "version": "3.17.1-cloud",
   "main": "dist/swagger-ui.js",
   "repository": "git@github.com:swagger-api/swagger-ui.git",
   "contributors": [
@@ -18,7 +18,7 @@
     "build-bundle": "webpack --config webpack-dist-bundle.config.js --colors",
     "build-core": "webpack --config webpack-dist.config.js --colors",
     "build-standalone": "webpack --config webpack-dist-standalone.config.js --colors",
-    "predev": "npm install",
+    "predev": "npm install --registry https://registry.npm.taobao.org",
     "dev": "npm-run-all --parallel hot-server",
     "watch": "webpack --config webpack-watch.config.js --watch --progress",
     "hot-server": "webpack-dev-server --host 0.0.0.0 --config webpack-hot-dev-server.config.js --inline --hot --progress --content-base dev-helpers/",
@@ -87,7 +87,7 @@
     "scroll-to-element": "^2.0.0",
     "serialize-error": "2.0.0",
     "shallowequal": "0.2.2",
-    "swagger-client": "^3.8.5",
+    "swagger-client": "3.8.5",
     "url-parse": "^1.1.8",
     "whatwg-fetch": "0.11.1",
     "worker-loader": "^0.7.1",

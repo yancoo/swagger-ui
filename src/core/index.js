@@ -129,6 +129,7 @@ module.exports = function SwaggerUI(opts) {
   store.register([constructorConfig.plugins, inlinePlugin])
 
   var system = store.getSystem()
+  system.authActions.tryAuthorizeFromLocalStorage()
 
   const downloadSpec = (fetchedConfig) => {
     let localConfig = system.specSelectors.getLocalConfig ? system.specSelectors.getLocalConfig() : {}
