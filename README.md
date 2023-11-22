@@ -1,18 +1,26 @@
-# swagger-ui 3.17.1 扩展 yan 2023.4.27
 
 ## 安装依赖、运行
 - npm run predev
 - npm run dev
 - 浏览器访问 http://localhost:3200
+  - 存在跨域问题
+  - 部署nginx，通过域名转发来访问(https://portal.pingpong-advisor.lab.bigai.site/)
+    - 如果域名需要指定非80/443端口，需配置x-forwarded-host
+      - nginx: proxy_set_header   Forwarded  host=$host:$server_port;
+      - istio: EnvoyFilter | request_handle:headers():add("x-forwarded-host", host)
 
 ## 编译发布 
 - npm run build && ./zip.sh
   - 58s
-  - dist打包zip，并移动到 ../springfox/spring-swagger-ui/build/zip 
+  - **dist打包zip**，并移动到 ../springfox/spring-swagger-ui/build/zip 
 - 按springfox/README.md，继续完成springfox-swagger-ui编译发布
   - 1m17s
  
-## 改进
+## TODO
+- 数值型不设example就有NumberFormatException异常
+- 登录authorize出错未正确处理
+
+## swagger-ui 3.17.1 扩展 yan 2023.4.27
 - package.json
   - 增加registry
     ```
@@ -42,8 +50,6 @@
     ```
     重新npm run dev成功
   - 浏览器正常访问 http://localhost:3200
-
-
 
 # Swagger UI
 
